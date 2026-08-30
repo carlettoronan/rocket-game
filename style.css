@@ -1,0 +1,89 @@
+/* Reset básico */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    display: flex;
+    justify-content: center;
+    background-color: #000;
+    font-family: Arial, sans-serif;
+    overflow: hidden; /* Impede a rolagem da página inteira */
+}
+
+/* Área do jogo fixa (estilo arcade/mobile vertical) */
+#game-board {
+    position: relative;
+    width: 100vw;
+    max-width: 600px; /* Limita a largura para a mecânica de desvio funcionar bem */
+    height: 100vh;
+    background-size: cover;
+    background-position: center bottom;
+    overflow: hidden;
+}
+
+/* --- MÁQUINA DE ESTADOS VISUAL (Fundos) --- */
+/* A imagem do lançamento é fixada e adaptada perfeitamente pelo CSS */
+.fase-plataforma { background-image: url('images/Rocket Launch.jpg'); }
+
+.fase-nuvens { 
+    background-image: url('images/Background 1 - Nuvens.avif'); 
+    animation: rolarFundo 4s linear infinite;
+}
+.fase-atmosfera { 
+    background-image: url('images/Background 2 - Nuvens Atmosfera.jpg'); 
+    animation: rolarFundo 4s linear infinite;
+}
+.fase-transicao { background-image: url('images/Background 3 - Terra Atmosfera.jpg'); }
+.fase-espaco { 
+    background-image: url('images/Background 4 - Espaço.jpg'); 
+    animation: rolarFundo 8s linear infinite; /* Rola mais devagar no espaço */
+}
+.fase-lua { background-image: url('images/Background 5 - Lua.jpg'); }
+
+/* O truque do movimento: desloca a imagem no eixo Y sem parar */
+@keyframes rolarFundo {
+    from { background-position: center 0; }
+    to { background-position: center 1000px; }
+}
+
+/* --- ELEMENTOS DE TELA --- */
+#start-screen {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    z-index: 10;
+}
+
+#btn-start {
+    margin-top: 20px;
+    padding: 15px 30px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background-color: #ff4757;
+    color: white;
+}
+
+#rocket {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%); /* Centraliza exato no eixo X */
+    width: 60px;
+    display: none; /* Fica oculto até o lançamento */
+    z-index: 5;
+}
+
+.obstacle {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background-color: #ff6b81; /* Cor provisória (depois você pode colocar imagens aqui) */
+    border-radius: 50%;
+}

@@ -1,48 +1,134 @@
-/* Reset básico */
-* { margin: 0; padding: 0; box-sizing: border-box; }
+/* Reset básico para padronizar margens em diferentes navegadores */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
 body {
     display: flex;
     justify-content: center;
     background-color: #000;
     font-family: Arial, sans-serif;
-    overflow: hidden; /* Impede a rolagem da página inteira */
+    overflow: hidden;
+    /* Impede a rolagem da página inteira */
 }
 
 /* Área do jogo fixa (estilo arcade/mobile vertical) */
 #game-board {
     position: relative;
     width: 100vw;
-    max-width: 600px; /* Limita a largura para a mecânica de desvio funcionar bem */
+    max-width: 600px;
+    /* Limita a largura para a mecânica de desvio funcionar bem */
     height: 100vh;
     background-size: cover;
     background-position: center bottom;
     overflow: hidden;
+    /* Suaviza a troca de uma imagem de fundo para outra */
+    transition: background-image 2s ease-in-out;
+}
+
+/* O truque do movimento: a câmera começa na base da imagem e sobe para o topo */
+@keyframes panFundo {
+    from {
+        background-position: center bottom;
+    }
+
+    to {
+        background-position: center top;
+    }
+}
+
+/* Garante que a imagem fique alta o suficiente para a rolagem ser visível nas fases animadas */
+.fase-nuvens,
+.fase-atmosfera,
+.fase-espaco {
+    background-size: auto 200% !important;
 }
 
 /* --- MÁQUINA DE ESTADOS VISUAL (Fundos) --- */
-/* A imagem do lançamento é fixada e adaptada perfeitamente pelo CSS */
-.fase-plataforma { background-image: url('images/Rocket Launch.jpg'); }
+.fase-plataforma {
+    background-image: url('images/Rocket Launch.jpg');
+    background-position: center bottom;
+}
 
-.fase-nuvens { 
-    background-image: url('images/Background 1 - Nuvens.avif'); 
-    animation: rolarFundo 4s linear infinite;
+/* O "forwards" faz a animação parar no último quadro, sem dar o "pulo" de volta */
+.fase-nuvens {
+    background-image: url('images/Background 1 - Nuvens.avif');
+    animation: panFundo 30s linear forwards;
 }
-.fase-atmosfera { 
-    background-image: url('images/Background 2 - Nuvens Atmosfera.jpg'); 
-    animation: rolarFundo 4s linear infinite;
-}
-.fase-transicao { background-image: url('images/Background 3 - Terra Atmosfera.jpg'); }
-.fase-espaco { 
-    background-image: url('images/Background 4 - Espaço.jpg'); 
-    animation: rolarFundo 8s linear infinite; /* Rola mais devagar no espaço */
-}
-.fase-lua { background-image: url('images/Background 5 - Lua.jpg'); }
 
-/* O truque do movimento: desloca a imagem no eixo Y sem parar */
-@keyframes rolarFundo {
-    from { background-position: center 0; }
-    to { background-position: center 1000px; }
+.fase-atmosfera {
+    background-image: url('images/Background 2 - Nuvens Atmosfera.jpg');
+    animation: panFundo 30s linear forwards;
+}
+
+.fase-transicao {
+    background-image: url('images/Background 3 - Terra Atmosfera.jpg');
+    background-position: center bottom;
+    /* Fica estático */
+}
+
+.fase-espaco {
+    background-image: url('images/Background 4 - Espaço.jpg');
+    animation: panFundo 40s linear forwards;
+}
+
+.fase-lua {
+    background-image: url('images/Background 5 - Lua.jpg');
+    background-position: center bottom;
+    /* Fica estático */
+}
+
+/* --- ANIMAÇÕES CINEMÁTICAS DA NAVE --- */
+@keyframes sairDaTerra {
+
+    0% {
+        bottom: 30%;
+        left: 50%;
+        transform: translateX(-50%) scale(0.25);
+    }
+
+    100% {
+        bottom: 120%;
+        left: 50%;
+        transform: translateX(-50%) scale(0.08);
+    }
+}
+
+.saindo-terra {
+    animation: sairDaTerra 10s linear forwards !important;
+}
+
+
+@keyframes subirDaTerra {
+    from {
+        bottom: 30%;
+        transform: translateX(-50%) scale(0.3);
+    }
+
+    to {
+        bottom: 120%;
+        transform: translateX(-50%) scale(0.15);
+    }
+}
+
+@keyframes girarAsteroide {
+    from {
+        rotate: 0deg;
+    }
+
+    to {
+        rotate: 360deg;
+    }
+}
+
+.pousando {
+    transition: all 4s ease-in-out !important;
+    bottom: 30% !important;
+    /* Estaciona um pouco acima da base */
+    transform: translateX(-50%) scale(0.2) !important;
+    /* Encolhe para 20% do tamanho */
 }
 
 /* --- ELEMENTOS DE TELA --- */
@@ -74,16 +160,20 @@ body {
     position: absolute;
     bottom: 30px;
     left: 50%;
-    transform: translateX(-50%); /* Centraliza exato no eixo X */
+    transform: translateX(-50%);
+    /* Centraliza exato no eixo X */
     width: 60px;
-    display: none; /* Fica oculto até o lançamento */
+    display: none;
+    /* Fica oculto até o lançamento */
     z-index: 5;
 }
 
+/* Obstáculos não têm mais cor, eles se adaptam à imagem que o JS injetar */
 .obstacle {
     position: absolute;
     width: 40px;
     height: 40px;
-    background-color: #ff6b81; /* Cor provisória (depois você pode colocar imagens aqui) */
-    border-radius: 50%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
 }

@@ -22,7 +22,6 @@ O jogador deve controlar o foguete utilizando as teclas:
    * Nuvens
    * Atmosfera
    * Espaço
-
 6. Na fase espacial, uma estrela pode aparecer.
 7. O jogador deve capturar a estrela para concluir a missão.
 8. Se uma estrela passar sem ser capturada, a dificuldade aumenta, fazendo com que os obstáculos apareçam mais rapidamente e caiam mais rápido.
@@ -41,6 +40,7 @@ Não são utilizadas bibliotecas ou frameworks externos.
 
 ## Estrutura do projeto
 
+```text
 rocket-game/
 ├── index.html
 ├── style.css
@@ -69,7 +69,8 @@ rocket-game/
 O jogo está publicado utilizando o **GitHub Pages**.
 
 **Link:**
-https://carlettoronan.github.io/rocket-game//
+
+https://carlettoronan.github.io/rocket-game/
 
 ## Licença
 

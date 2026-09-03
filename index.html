@@ -9,18 +9,34 @@
 </head>
 
 <body>
-    <div id="game-board" class="fase-plataforma">
+<div id="game-board" class="fase-plataforma">
 
-        <div id="start-screen">
-            <h1>Missão Lua</h1>
-            <button id="btn-start">Iniciar Lançamento</button>
-        </div>
-
-        <img id="rocket" src="images/Foguete.gif" alt="Foguete">
-
-        <div id="obstacles-container"></div>
-
+    <div id="start-screen">
+        <h1>Missão Lua</h1>
+        <p>Use ← e → para desviar dos obstáculos.</p>
+        <p>Quanto mais tempo sobreviver, mais pontos.</p>
+        <p>Pegue a estrela na fase espacial para pousar!</p>
+        <p>Se deixar uma estrela escapar, a dificuldade aumenta.</p>
+        <button id="btn-start">Iniciar Missão</button>
     </div>
+    
+    <div id="game-over-screen">
+        <h1 id="game-over-title">Fim de jogo</h1>
+        <p id="game-over-message"></p>
+        <p>Pontuação final: <span id="final-score">0</span></p>
+        <button id="btn-restart">Jogar Novamente</button>
+    </div>
+
+    <div id="score">
+        Pontuação: <span id="score-value">0</span>
+    </div>
+
+    <img id="rocket" src="images/Foguete.gif" alt="Foguete">
+
+    <div id="obstacles-container"></div>
+
+</div>
+
 
     <script src="script.js"></script>
 </body>

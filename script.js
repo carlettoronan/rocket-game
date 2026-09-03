@@ -12,6 +12,10 @@ const gameOverMessage = document.getElementById('game-over-message');
 const finalScore = document.getElementById('final-score');
 const btnRestart = document.getElementById('btn-restart');
 
+const musica = document.getElementById('musica');
+const somFoguete = document.getElementById('som-foguete');
+
+
 btnStart.addEventListener('click', iniciarJogo);
 btnRestart.addEventListener('click', iniciarJogo);
 
@@ -19,6 +23,7 @@ btnRestart.addEventListener('click', iniciarJogo);
 // ESTADO DO JOGO
 // =============================
 let jogoRodando = false;
+let arrastando = false;
 let posicaoX = board.offsetWidth / 2;
 let obstaculos = [];
 
@@ -47,12 +52,45 @@ window.addEventListener('keyup', (e) => {
     teclas[e.key] = false;
 });
 
+rocket.addEventListener('pointerdown', (e) => {
+    if (!jogoRodando) return;
+    arrastando = true;
+    rocket.setPointerCapture(e.pointerId);
+    e.preventDefault();
+});
+
+rocket.addEventListener('pointermove', (e) => {
+    if (!arrastando || !jogoRodando) return;
+    const rect = board.getBoundingClientRect();
+    let novaPosicaoX = e.clientX - rect.left;
+    novaPosicaoX = Math.max(30, novaPosicaoX);
+    novaPosicaoX = Math.min(board.offsetWidth - 30, novaPosicaoX);
+    posicaoX = novaPosicaoX;
+});
+
+rocket.addEventListener('pointerup', (e) => {
+    arrastando = false;
+    rocket.releasePointerCapture(e.pointerId);
+});
+
+rocket.addEventListener('pointercancel', () => {
+    arrastando = false;
+});
+
+
 // =============================
 // INICIAR JOGO
 // =============================
 function iniciarJogo() {
 
     if (animationId) cancelAnimationFrame(animationId);
+
+    somFoguete.pause();
+    somFoguete.currentTime = 0;
+
+    musica.pause();
+    musica.currentTime = 0;
+    tocarMusica();
 
     // Cancela qualquer partida anterior
     limparTimers();
@@ -116,6 +154,8 @@ function iniciarJogo() {
         spawnTimer = null;
         limparObstaculos();
         jogoRodando = false;
+        pausarMusica();
+        tocarFoguete();
 
         // Tirar a classe "subida-continua" para a transição
         board.className = 'fase-transicao';
@@ -128,6 +168,8 @@ function iniciarJogo() {
     // =============================
     timers.push(setTimeout(() => {
         if (gameOverScreen.style.display === 'block') return;
+
+        tocarMusica();
 
         board.className = 'fase-espaco';
 
@@ -350,5 +392,20 @@ function encerrarJogo(vitoria) {
 }
 
 function concluirMissao() {
+    pausarMusica();
+    tocarFoguete();
     encerrarJogo(true);
+}
+
+function pausarMusica() {
+    musica.pause();
+}
+
+function tocarMusica() {
+    musica.play().catch(() => { });
+}
+
+function tocarFoguete() {
+    somFoguete.currentTime = 0;
+    somFoguete.play().catch(() => { });
 }

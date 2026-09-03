@@ -163,6 +163,9 @@ body {
     width: 60px;
     display: none;
     z-index: 5;
+
+    touch-action: none;
+    user-select: none;
 }
 
 .obstacle {

@@ -6,10 +6,10 @@
 
 ## Como jogar
 
-O jogador deve controlar o foguete utilizando as teclas:
+O jogador pode controlar o foguete de duas formas:
 
-* **←** Mover para a esquerda
-* **→** Mover para a direita
+- **PC:** utilizando as teclas **←** e **→**;
+- **Mouse ou celular:** clique/toque sobre o foguete e arraste para os lados.
 
 ### Regras
 
@@ -19,9 +19,9 @@ O jogador deve controlar o foguete utilizando as teclas:
 4. A pontuação aumenta conforme o jogador permanece vivo.
 5. A missão passa por diferentes fases:
 
-   * Nuvens
-   * Atmosfera
-   * Espaço
+   - Nuvens
+   - Atmosfera
+   - Espaço
 6. Na fase espacial, uma estrela pode aparecer.
 7. O jogador deve capturar a estrela para concluir a missão.
 8. Se uma estrela passar sem ser capturada, a dificuldade aumenta, fazendo com que os obstáculos apareçam mais rapidamente e caiam mais rápido.
@@ -32,9 +32,9 @@ O jogador deve controlar o foguete utilizando as teclas:
 
 O jogo foi desenvolvido utilizando exclusivamente tecnologias web básicas:
 
-* **HTML5** — estrutura da página e dos elementos do jogo;
-* **CSS3** — aparência, animações, fases e efeitos visuais;
-* **JavaScript puro** — lógica do jogo, movimentação, colisões, pontuação, obstáculos, fases e controle do estado da partida.
+- **HTML5** — estrutura da página e dos elementos do jogo;
+- **CSS3** — aparência, animações, fases e efeitos visuais;
+- **JavaScript puro** — lógica do jogo, movimentação, colisões, pontuação, obstáculos, fases e controle do estado da partida.
 
 Não são utilizadas bibliotecas ou frameworks externos.
 
@@ -70,7 +70,7 @@ O jogo está publicado utilizando o **GitHub Pages**.
 
 **Link:**
 
-https://carlettoronan.github.io/rocket-game/
+<https://carlettoronan.github.io/rocket-game/>
 
 ## Licença
 

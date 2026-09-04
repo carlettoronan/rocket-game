@@ -276,10 +276,7 @@ function gerarObstaculo() {
 // GAME LOOP E COLISÃO
 // =============================
 function gameLoop(tempoAtual) {
-    if (!jogoRodando) {
-        requestAnimationFrame(gameLoop);
-        return;
-    }
+    if (!jogoRodando) return;
 
     // Tempo desde o último frame
     if (ultimoFrame === 0) ultimoFrame = tempoAtual;

@@ -31,6 +31,7 @@ let pontuacao = 0;
 let velocidadeQueda = 3;
 let intervaloSpawn = 1000;
 
+let ultimoFrame = 0;
 let spawnTimer = null;
 let timers = [];
 let animationId = null;
@@ -102,6 +103,7 @@ function iniciarJogo() {
 
     // Reset do jogo
     jogoRodando = true;
+    ultimoFrame = performance.now();
     pontuacao = 0;
     velocidadeQueda = 3;
     intervaloSpawn = 1000;
@@ -132,7 +134,7 @@ function iniciarJogo() {
     // =============================
     board.className = 'fase-nuvens';
 
-    gameLoop();
+    animationId = requestAnimationFrame(gameLoop);
     iniciarSpawn();
 
     // =============================
@@ -184,8 +186,7 @@ function iniciarJogo() {
         jogoRodando = true;
         inicioEspaco = Date.now();
 
-        gameLoop();
-
+        animationId = requestAnimationFrame(gameLoop);
         iniciarSpawn();
 
     }, 37000));
@@ -274,31 +275,62 @@ function gerarObstaculo() {
 // =============================
 // GAME LOOP E COLISÃO
 // =============================
-function gameLoop() {
-    if (!jogoRodando) return;
+function gameLoop(tempoAtual) {
+    if (!jogoRodando) {
+        requestAnimationFrame(gameLoop);
+        return;
+    }
 
-    pontuacao += 0.05;
+    // Tempo desde o último frame
+    if (ultimoFrame === 0) ultimoFrame = tempoAtual;
+
+    const deltaTime = tempoAtual - ultimoFrame;
+    ultimoFrame = tempoAtual;
+
+    // Evita saltos muito grandes caso o navegador
+    // fique alguns instantes sem atualizar
+    const fatorTempo = Math.min(deltaTime, 50) / 16.67;
+
+    // =============================
+    // PONTUAÇÃO
+    // =============================
+
+    pontuacao += deltaTime * 0.003;
     scoreValue.textContent = Math.floor(pontuacao);
 
+    // =============================
+    // MOVIMENTO DA NAVE
+    // =============================
+
+
     if (teclas['ArrowLeft'] && posicaoX > 30) {
-        posicaoX -= 6;
+        posicaoX -= 6 * fatorTempo;
     }
     if (teclas['ArrowRight'] && posicaoX < board.offsetWidth - 30) {
-        posicaoX += 6;
+        posicaoX += 6 * fatorTempo;
     }
 
     rocket.style.left = `${posicaoX}px`;
 
     const naveRetangulo = rocket.getBoundingClientRect();
 
+    // =============================
+    // OBSTÁCULOS
+    // =============================
+
     for (let i = obstaculos.length - 1; i >= 0; i--) {
         const obs = obstaculos[i];
         let obsTop = parseFloat(obs.style.top);
 
-        obsTop += velocidadeQueda;
+        obsTop += velocidadeQueda * fatorTempo;
         obs.style.top = `${obsTop}px`;
 
         const obsRetangulo = obterHitbox(obs);
+
+
+        // =============================
+        // COLISÃO
+        // =============================
 
         if (
             naveRetangulo.left < obsRetangulo.right &&
@@ -313,6 +345,11 @@ function gameLoop() {
             encerrarJogo(false);
             return;
         }
+
+
+        // =============================
+        // OBJETO SAIU DA TELA
+        // =============================
 
         if (obsTop > board.offsetHeight) {
             if (obs.classList.contains('estrela')) {
